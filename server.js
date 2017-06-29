@@ -29,15 +29,29 @@ app.route('/')
 		  res.sendFile(process.cwd() + '/views/index.html');
     })
 
-app.route('/new')
-    .get(function(req, res) {
-      res.type('txt').send(req.url)
-})
+var urlMap = {}
 
-//var urlMap = {}
-app.get(function(req,res){
+app.use('/new', function(req, res, next) {  // GET 'http://www.example.com/admin/new'
+  var urlOutput = {}
+  urlOutput["original_url"] = (req.path).slice(1) // removes the initial '/'
   
-}) 
+  do {
+    // generate random math number between 1-10000
+  }
+  while(!urlMap.hasOwnProperty(generatedKey))
+    
+  res.type('txt').send("url = "+req.path)
+  next();
+});
+
+// app.route('/new')
+//     .get(function(req, res) {
+//       res.type('txt').send("url = "+req.originalUrl)
+// })
+
+/*app.get(function(req,res){
+  
+})*/ 
 
 
 
