@@ -5,8 +5,6 @@
 
 'use strict';
 
-var al_parser = require('accept-language-parser');
-var fs = require('fs');
 var express = require('express');
 var app = express();
 
