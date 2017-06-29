@@ -31,27 +31,32 @@ app.route('/')
 
 var urlMap = {}
 
+// Part 1 - Generate the Shortened URL
 app.use('/new', function(req, res, next) {  // GET 'http://www.example.com/admin/new'
   var urlOutput = {}
-  urlOutput["original_url"] = (req.path).slice(1) // removes the initial '/'
+  const originalUrl = (req.path).slice(1) // removes the initial '/'
+  urlOutput["original_url"] = originalUrl
   
+  var generatedKey = null
   do {
     // generate random math number between 1-10000
+    // TODO: Pad this number with leading zeros
+    generatedKey = Math.floor(Math.random() * 10000)
+    if (!urlMap.hasOwnProperty(generatedKey)) {
+      urlMap[generatedKey] = originalUrl
+    }
   }
   while(!urlMap.hasOwnProperty(generatedKey))
-    
-  res.type('txt').send("url = "+req.path)
+  
+  urlOutput["short_url"] = "https://clearyusc-url-shortener.glitch.me"+'/'+generatedKey.toString()
+  
+  res.type('txt').send(JSON.stringify(urlOutput))
   next();
 });
 
-// app.route('/new')
-//     .get(function(req, res) {
-//       res.type('txt').send("url = "+req.originalUrl)
-// })
 
-/*app.get(function(req,res){
-  
-})*/ 
+// Part 2 - Route the Shortened URL
+app.route()
 
 
 
