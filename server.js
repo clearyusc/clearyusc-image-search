@@ -56,8 +56,14 @@ app.use('/new', function(req, res, next) {  // GET 'http://www.example.com/admin
 
 
 // Part 2 - Route the Shortened URL
-app.route()
+urlMap.forEach(routeShortenedUrl)
 
+function routeShortenedUrl(value, key, map) {
+  let r = '/'+key.toString()
+  app.use(r, function(req,res,next){
+    res.redirect(value)
+  })
+}
 
 
 // Respond not found to all the wrong routes
