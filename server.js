@@ -23,70 +23,23 @@ if (!process.env.DISABLE_XORIGIN) {
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
-app.route('/_api/package.json')
-  .get(function(req, res, next) {
-    console.log('requested');
-    fs.readFile(__dirname + '/package.json', function(err, data) {
-      if(err) return next(err);
-      res.type('txt').send(data.toString());
-    });
-  });
   
 app.route('/')
     .get(function(req, res) {
 		  res.sendFile(process.cwd() + '/views/index.html');
     })
 
-
-
-app.enable('trust proxy'); // ** TODO: Dive deeper into this to understand it better. It makes req.ip work, see below
-
-app.route('/api/whoami')
+app.route('/new')
     .get(function(req, res) {
-  
-  var clientData = {"ipaddress":null,"language":null,"software":null,"browser":null} 
-  clientData["ipaddress"] = req.ip
-  
-  const languages = al_parser.parse(req.headers["accept-language"]);
-  
-  
-  /* // TODO: Update this some day to handle multiple languages. (Current challenge on FCC only asks for 1.)
-  
-  var acceptedLanguages = ""
-  languages.forEach((language) => {   
-    console.log(language)
-    acceptedLanguages = acceptedLanguages.concat(language['code'])
-    console.log('acceptedlanguages.1 = '+acceptedLanguages)
-    const alRegion = "-".concat((language["region"]) ? language["region"] : "") // its added with a '-'
-    acceptedLanguages = acceptedLanguages.concat(alRegion)
-    console.log('acceptedlanguages.2 = '+acceptedLanguages)
-  }) 
-  
-  clientData["language"] = acceptedLanguages
-  
-  */
-  
-  
-  const aLang = languages[0]["code"]
-  let r = languages[0]["region"]
-  clientData["language"] = aLang.concat( (r) ?  "-"+r : "")
-  
-  
-  const techStr = req.headers["user-agent"]  
-  let p1 = techStr.indexOf('(')
-  let p2 = techStr.indexOf(')')  
-    
-  const softwareStr = techStr.substring(p1+1,p2)
-  clientData["software"] = softwareStr.trim()
-  
-  const browserStr = techStr.substring(0,p1) // TODO: Modularize this parsing code more. (It's late and im tired.)
-  clientData["browser"] = browserStr.trim()
-    
-  
-  
-  res.type('txt').send(JSON.stringify(clientData))
-  
+      res.type('txt').send(req.url)
 })
+
+//var urlMap = {}
+app.get(function(req,res){
+  
+}) 
+
+
 
 // Respond not found to all the wrong routes
 app.use(function(req, res, next){
