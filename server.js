@@ -7,6 +7,8 @@
 
 var express = require('express');
 var app = express();
+var validUrl = require('valid-url');
+
 
 if (!process.env.DISABLE_XORIGIN) {
   app.use(function(req, res, next) {
@@ -31,12 +33,18 @@ app.route('/')
 
 var urlMap = {}
 
-// TODO: Do we need to use a database in order to have persistent storage?
+// TODO: Determine if it needs a database in order to have persistent storage
 
 // Part 1 - Generate the Shortened URL
 app.use('/new', function(req, res, next) {  // GET 'http://www.example.com/admin/new'
   var urlOutput = {}
   const originalUrl = (req.path).slice(1) // removes the initial '/'
+  
+  if (!validUrl.isWebUri(originalUrl)){
+      res.type('txt').send("Error, invalid URL: "+originalUrl)
+      next()
+  } 
+  
   urlOutput["original_url"] = originalUrl
   
   var generatedKey = null
@@ -57,18 +65,12 @@ app.use('/new', function(req, res, next) {  // GET 'http://www.example.com/admin
 });
 
 
+
 // Part 2 - Route the Shortened URL
 var shortUrlsArray = []
 Object.keys(urlMap).forEach(function(key) {
   shortUrlsArray.push('/'+key.toString())                                                    
 })
-
-//TODO: Add this validation check
-/* 
-  User Story: If I pass an invalid URL that 
-  doesn't follow the valid http://www.example.com 
-  format, the JSON response will contain an error instead.
-*/
 
 app.use(shortUrlsArray, function(req,res,next){
   /*res.type('txt').send('This should be a short url redirect to '+
