@@ -5,7 +5,8 @@ body {
 	font-size: 16px;
 	color: #222;
 	background-color: #ECF0F1;
-	text-align: center;
+	text-align: left;
+  padding-left: 80px;
 }
 
 .container {
