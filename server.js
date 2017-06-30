@@ -56,6 +56,8 @@ app.use('/new', function(req, res, next) {  // GET 'http://www.example.com/admin
   next();
 });
 
+
+// Part 2 - Route the Shortened URL
 var shortUrlsArray = []
 Object.keys(urlMap).forEach(function(key) {
   shortUrlsArray.push('/'+key.toString())                                                    
@@ -69,20 +71,11 @@ Object.keys(urlMap).forEach(function(key) {
 */
 
 app.use(shortUrlsArray, function(req,res,next){
-  //res.redirect(shortUrlsArray) TODO: Make this redirect to the particular path item, not entire array
-  res.type('txt').send('This should be a short url redirect')
+  /*res.type('txt').send('This should be a short url redirect to '+
+      urlMap[parseInt((req.path).slice(1))])*/
+  res.redirect(urlMap[parseInt((req.path).slice(1))])
   next()
 })
-
-// Part 2 - Route the Shortened URL
-// urlMap.forEach(routeShortenedUrl)
-
-// function routeShortenedUrl(value, key, map) {
-//   let r = '/'+key.toString()
-//   app.use(r, function(req,res,next){
-//     res.redirect(value)
-//   })
-// }
 
 
 // Respond not found to all the wrong routes
