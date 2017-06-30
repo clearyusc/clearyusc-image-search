@@ -31,6 +31,8 @@ app.route('/')
 
 var urlMap = {}
 
+// TODO: Do we need to use a database in order to have persistent storage?
+
 // Part 1 - Generate the Shortened URL
 app.use('/new', function(req, res, next) {  // GET 'http://www.example.com/admin/new'
   var urlOutput = {}
@@ -54,17 +56,23 @@ app.use('/new', function(req, res, next) {  // GET 'http://www.example.com/admin
   next();
 });
 
-//TODO: fix this code 
-// TODO: fix git
-const formattedUrlMap = Object.keys(urlMap).forEach(function(k))
+var shortUrlsArray = []
 Object.keys(urlMap).forEach(function(key) {
+  shortUrlsArray.push('/'+key.toString())                                                    
+})
 
-    let r = '/'+key.toString()
-    app.use(r, function(req,res,next){
-      res.redirect(urlMap[key])
-    })
+//TODO: Add this validation check
+/* 
+  User Story: If I pass an invalid URL that 
+  doesn't follow the valid http://www.example.com 
+  format, the JSON response will contain an error instead.
+*/
 
-});
+app.use(shortUrlsArray, function(req,res,next){
+  //res.redirect(shortUrlsArray) TODO: Make this redirect to the particular path item, not entire array
+  res.type('txt').send('This should be a short url redirect')
+  next()
+})
 
 // Part 2 - Route the Shortened URL
 // urlMap.forEach(routeShortenedUrl)
