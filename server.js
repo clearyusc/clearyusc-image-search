@@ -56,6 +56,7 @@ app.use('/new', function(req, res, next) {  // GET 'http://www.example.com/admin
 
 //TODO: fix this code 
 // TODO: fix git
+const formattedUrlMap = Object.keys(urlMap).forEach(function(k))
 Object.keys(urlMap).forEach(function(key) {
 
     let r = '/'+key.toString()
