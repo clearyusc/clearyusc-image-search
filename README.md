@@ -1,11 +1,5 @@
 # URL Shortener Microservice
 
-<style>
-code {
-    color: #c7254e;
-    background-color: #f9f2f4;
-  }
-</style>
 
 
 <blockquote>
