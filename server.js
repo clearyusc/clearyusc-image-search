@@ -30,6 +30,15 @@ app.route('/')
 		  res.sendFile(process.cwd() + '/views/index.html');
     })
 
+/* DEV PLAN
+
+1. Routing for both user scenarios & urls
+-- need to handle search term AND offset number
+2. Implement Custom Search JSON/Atom API
+3. Connect to MongoDB
+4. Store search queries & timestamp to mongodb
+
+*/
 
 // Respond not found to all the wrong routes
 app.use(function(req, res, next){
