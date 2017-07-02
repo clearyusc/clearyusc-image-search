@@ -7,6 +7,7 @@
 
 var express = require('express');
 var app = express();
+var mongodb = require(process.cwd()+'/datastore.js')
 
 
 if (!process.env.DISABLE_XORIGIN) {
@@ -29,6 +30,13 @@ app.route('/')
     .get(function(req, res) {
 		  res.sendFile(process.cwd() + '/views/index.html');
     })
+
+app.route('/testdb')
+  .get(function(req,res) {
+    mongodb.dbConnect
+  // TODO: implement a try catch with error handling here
+    res.type('txt').send('hi - db?');
+})
 
 /* DEV PLAN
 
