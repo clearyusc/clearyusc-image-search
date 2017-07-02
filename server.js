@@ -7,7 +7,6 @@
 
 var express = require('express');
 var app = express();
-var validUrl = require('valid-url');
 
 
 if (!process.env.DISABLE_XORIGIN) {
@@ -30,54 +29,6 @@ app.route('/')
     .get(function(req, res) {
 		  res.sendFile(process.cwd() + '/views/index.html');
     })
-
-var urlMap = {}
-
-// TODO: Determine if it needs a database in order to have persistent storage
-
-// Part 1 - Generate the Shortened URL
-app.use('/new', function(req, res, next) {  // GET 'http://www.example.com/admin/new'
-  var urlOutput = {}
-  const originalUrl = (req.path).slice(1) // removes the initial '/'
-  
-  if (!validUrl.isWebUri(originalUrl)){
-      res.type('txt').send("Error, invalid URL: "+originalUrl)
-      next()
-  } 
-  
-  urlOutput["original_url"] = originalUrl
-  
-  var generatedKey = null
-  do {
-    // generate random math number between 1-10000
-    // TODO: Pad this number with leading zeros
-    generatedKey = Math.floor(Math.random() * 10000)
-    if (!urlMap.hasOwnProperty(generatedKey)) {
-      urlMap[generatedKey] = originalUrl
-    }
-  }
-  while(!urlMap.hasOwnProperty(generatedKey))
-  
-  urlOutput["short_url"] = "https://clearyusc-url-shortener.glitch.me"+'/'+generatedKey.toString()
-  
-  res.type('txt').send(JSON.stringify(urlOutput))
-  next();
-});
-
-
-
-// Part 2 - Route the Shortened URL
-var shortUrlsArray = []
-Object.keys(urlMap).forEach(function(key) {
-  shortUrlsArray.push('/'+key.toString())                                                    
-})
-
-app.use(shortUrlsArray, function(req,res,next){
-  /*res.type('txt').send('This should be a short url redirect to '+
-      urlMap[parseInt((req.path).slice(1))])*/
-  res.redirect(urlMap[parseInt((req.path).slice(1))])
-  next()
-})
 
 
 // Respond not found to all the wrong routes
