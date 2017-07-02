@@ -8,8 +8,8 @@ var MongoClient = mongodb.MongoClient;
 
 // TODO: Make it more secure by implementing it the process variable way
 // var MONGODB_URI = 'mongodb://'+process.env.USER+':'+process.env.PASS+'@'+process.env.HOST+':'+process.env.DB_PORT+'/'+process.env.DB;
-var url = process.env.MONGODB_URI;
-//var url = 'mongodb://dbuser1:password1@ds035846.mlab.com:35846/image-search-db';
+//var url = process.env.MONGODB_URI;
+var url = 'mongodb://dbuser1:password1@ds035846.mlab.com:35846/image-search-db';
 //(Focus on This Variable)
 
 // Use connect method to connect to the Server
@@ -20,7 +20,7 @@ var dbConnect = MongoClient.connect(url, function (err, db) {
     console.log('Connection established to', url);
 
     // do some work here with the database.
-
+    //db.insert
     //Close connection
     db.close();
   }
