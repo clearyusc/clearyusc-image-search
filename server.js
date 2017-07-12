@@ -48,6 +48,18 @@ app.route('/testdb')
 
 */
 
+// Routing for User Search Scenario
+app.route('/api/imagesearch')
+  .get((req,res) => {
+  //res.type('txt').send('image search');
+});
+
+// Routing for Latest Search keys
+app.route('/api/latest')
+  .get((req,res) => {
+  //res.type('txt').send('latest');
+});
+
 // Respond not found to all the wrong routes
 app.use(function(req, res, next){
   res.status(404);
