@@ -51,7 +51,7 @@ app.route('/testdb')
 */
 
 // Routing for User Search Scenario
-app.route('/api/imagesearch')
+app.route('/api/imagesearch/*')
   .get((req,res) => {
   let queryString = req.params[0]
   let offset = req.params[1]
@@ -62,8 +62,10 @@ app.route('/api/imagesearch')
       "key="+SEARCH_API_KEY+
       "&cx="+SEARCH_ENGINE_ID+"&q="+queryString;
 
+  
   //res.route(searchEngineGETRequest)
-  res.type('txt').send(searchEngineGETRequest);
+res.redirect(searchEngineGETRequest)
+  //res.type('txt').send(res.redirect(searchEngineGETRequest));
 });
 
 // Routing for Latest Search keys
