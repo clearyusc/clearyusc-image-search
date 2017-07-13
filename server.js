@@ -9,6 +9,8 @@ var express = require('express');
 var app = express();
 var mongodb = require(process.cwd()+'/datastore.js')
 
+const SEARCH_API_KEY = "AIzaSyDRR9lHUt32j6C8jjw"
+const SEARCH_ENGINE_ID = "V8DObocGFFQ68"
 
 if (!process.env.DISABLE_XORIGIN) {
   app.use(function(req, res, next) {
@@ -51,6 +53,11 @@ app.route('/testdb')
 // Routing for User Search Scenario
 app.route('/api/imagesearch')
   .get((req,res) => {
+  
+  let searchEngineGETRequest = "https://www.googleapis.com/customsearch/v1?"+
+      "key="+SEARCH_API_KEY+"&cx="+SEARCH_ENGINE_ID+"":omuauf_lfve&q=lectures"
+
+  
   //res.type('txt').send('image search');
 });
 
