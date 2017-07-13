@@ -55,7 +55,7 @@ app.route('/testdb')
 app.route('/api/imagesearch/*')
   .get((req,res) => {
   let queryString = req.params[0]
-  let offset = parseInt(req.params[1], 10) // decimal radix
+  let offset = parseInt(req.query.offset, 10) // decimal radix
   console.log("querystring = "+queryString)
   console.log("offset = "+offset)
   console.log('originalURL'+req.originalUrl)
@@ -67,9 +67,12 @@ app.route('/api/imagesearch/*')
   var searchResults = {}
   if (offset != null && offset > GOOGLE_MAX_SEARCH_RESULTS) {
     // ex: 26
+    res.redirect(searchEngineGETRequest.concat("&num=10&start="+10)); // maybe i+1 ?
     for (let i=0;i<offset;i+=10) {
-      res.redirect(searchEngineGETRequest)
+      //res.redirect(searchEngineGETRequest.concat("&num=10&start="+i.toString())); // maybe i+1 ?
     }
+  } else {
+    res.redirect(searchEngineGETRequest)
   }
   
   //TODO: Filter for the specific data we need for this project
