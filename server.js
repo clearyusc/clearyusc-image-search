@@ -9,7 +9,7 @@ var express = require('express');
 var app = express();
 var mongodb = require(process.cwd()+'/datastore.js')
 
-const SEARCH_API_KEY = "AIzaSyDRR9lHUt32j6C8jjw"
+const SEARCH_API_KEY = "AIzaSyBEEBx9ItiTIQKE-4uNNYBlnIqhYSUVmBc" 
 const SEARCH_ENGINE_ID = "001153346103810259976:qlqqw-ih6t4"
 
 if (!process.env.DISABLE_XORIGIN) {
@@ -62,6 +62,9 @@ app.route('/api/imagesearch/*')
       "key="+SEARCH_API_KEY+
       "&cx="+SEARCH_ENGINE_ID+"&q="+queryString;
 
+  //TODO: Filter for the specific data we need for this project
+  
+  //TODO: 
   
   //res.route(searchEngineGETRequest)
 res.redirect(searchEngineGETRequest)
