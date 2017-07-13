@@ -63,19 +63,26 @@ app.route('/api/imagesearch/*')
       "key="+SEARCH_API_KEY+
       "&cx="+SEARCH_ENGINE_ID+"&q="+queryString;
 
+    //TODO: Filter for the specific data we need for this project
+    // url, snippet, thumbnail, context
+  
+  var rawSearchResults = res.redirect(searchEngineGETRequest)
+  for (let i = 0; i < rawSearchResults.items.length; i++) {
+    
+  }
+  
   //TODO: Add pagination via the offset using the Google Search Engine API
-  var searchResults = {}
+  
   if (offset != null && offset > GOOGLE_MAX_SEARCH_RESULTS) {
     // ex: 26
-    res.redirect(searchEngineGETRequest.concat("&num=10&start="+10)); // maybe i+1 ?
-    for (let i=0;i<offset;i+=10) {
-      //res.redirect(searchEngineGETRequest.concat("&num=10&start="+i.toString())); // maybe i+1 ?
+    res.redirect(searchEngineGETRequest.concat("&num=10&start="+11)); 
+    for (let i=11;i<offset;i+=10) {
+      //res.redirect(searchEngineGETRequest.concat("&num=10&start="+i.toString())); 
     }
   } else {
     res.redirect(searchEngineGETRequest)
   }
   
-  //TODO: Filter for the specific data we need for this project
   
 
   
