@@ -51,6 +51,25 @@ app.route('/testdb')
 
 */
 
+app.route('https://www.googleapis.com/customsearch/')
+  .get((req,res) => {
+  
+    //TODO: Filter for the specific data we need for this project
+    // url, snippet, thumbnail, context
+  console.log("DID IT WORK KINDA?")
+  const rawSearchResults = res.json
+  var searchResults = []
+  // TODO: Rewrite this to use array filtering
+  for (let i = 0; i < rawSearchResults.items.length; i++) {
+    let item = rawSearchResults.items[i]
+    let obj = {"url":null,"snippet":null,"thumbnail":null,"context":null}
+    obj["url"] = item["link"]
+    obj["snippet"] = item["snippet"]
+    //obj["thumbnail"] = item[]
+    searchResults.push(obj)
+  }
+})
+
 // Routing for User Search Scenario
 app.route('/api/imagesearch/*')
   .get((req,res) => {
@@ -63,22 +82,10 @@ app.route('/api/imagesearch/*')
       "key="+SEARCH_API_KEY+
       "&cx="+SEARCH_ENGINE_ID+"&q="+queryString;
 
-    //TODO: Filter for the specific data we need for this project
-    // url, snippet, thumbnail, context
+  res.redirect(searchEngineGETRequest)
   
-  const rawSearchResults = res.redirect(searchEngineGETRequest)
-  var searchResults = []
-  // TODO: Rewrite this to use array filtering
-  for (let i = 0; i < rawSearchResults.items.length; i++) {
-    let item = rawSearchResults.items[i]
-    let obj = {"url":null,"snippet":null,"thumbnail":null,"context":null}
-    obj["url"] = item["link"]
-    obj["snippet"] = item["snippet"]
-    //obj["thumbnail"] = item[]
-    searchResults.push(obj)
-  }
   
-  res.type('txt').send(searchResults)
+  //res.type('txt').send(searchResults)
   
   /*
   //TODO: Add pagination via the offset using the Google Search Engine API
