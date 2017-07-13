@@ -57,11 +57,13 @@ app.route('/api/imagesearch')
   let offset = req.params[1]
   console.log("querystring = "+queryString)
   console.log("offset = "+offset)
+  console.log('originalURL'+req.originalUrl)
   let searchEngineGETRequest = "https://www.googleapis.com/customsearch/v1?"+
       "key="+SEARCH_API_KEY+
       "&cx="+SEARCH_ENGINE_ID+"&q="+queryString;
 
-  //res.type('txt').send('image search');
+  //res.route(searchEngineGETRequest)
+  res.type('txt').send(searchEngineGETRequest);
 });
 
 // Routing for Latest Search keys
