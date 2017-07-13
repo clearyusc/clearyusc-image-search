@@ -66,11 +66,21 @@ app.route('/api/imagesearch/*')
     //TODO: Filter for the specific data we need for this project
     // url, snippet, thumbnail, context
   
-  var rawSearchResults = res.redirect(searchEngineGETRequest)
+  const rawSearchResults = res.redirect(searchEngineGETRequest)
+  var searchResults = []
+  // TODO: Rewrite this to use array filtering
   for (let i = 0; i < rawSearchResults.items.length; i++) {
-    
+    let item = rawSearchResults.items[i]
+    let obj = {"url":null,"snippet":null,"thumbnail":null,"context":null}
+    obj["url"] = item["link"]
+    obj["snippet"] = item["snippet"]
+    //obj["thumbnail"] = item[]
+    searchResults.push(obj)
   }
   
+  res.type('txt').send(searchResults)
+  
+  /*
   //TODO: Add pagination via the offset using the Google Search Engine API
   
   if (offset != null && offset > GOOGLE_MAX_SEARCH_RESULTS) {
@@ -81,7 +91,7 @@ app.route('/api/imagesearch/*')
     }
   } else {
     res.redirect(searchEngineGETRequest)
-  }
+  }*/
   
   
 
