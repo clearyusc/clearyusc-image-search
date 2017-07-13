@@ -11,6 +11,7 @@ var mongodb = require(process.cwd()+'/datastore.js')
 
 const SEARCH_API_KEY = "AIzaSyBEEBx9ItiTIQKE-4uNNYBlnIqhYSUVmBc" 
 const SEARCH_ENGINE_ID = "001153346103810259976:qlqqw-ih6t4"
+const GOOGLE_MAX_SEARCH_RESULTS = 10
 
 if (!process.env.DISABLE_XORIGIN) {
   app.use(function(req, res, next) {
@@ -54,7 +55,7 @@ app.route('/testdb')
 app.route('/api/imagesearch/*')
   .get((req,res) => {
   let queryString = req.params[0]
-  let offset = req.params[1]
+  let offset = parseInt(req.params[1], 10) // decimal radix
   console.log("querystring = "+queryString)
   console.log("offset = "+offset)
   console.log('originalURL'+req.originalUrl)
@@ -62,12 +63,21 @@ app.route('/api/imagesearch/*')
       "key="+SEARCH_API_KEY+
       "&cx="+SEARCH_ENGINE_ID+"&q="+queryString;
 
+  //TODO: Add pagination via the offset using the Google Search Engine API
+  var searchResults = {}
+  if (offset != null && offset > GOOGLE_MAX_SEARCH_RESULTS) {
+    // ex: 26
+    for (let i=0;i<offset;i+=10) {
+      res.redirect(searchEngineGETRequest)
+    }
+  }
+  
   //TODO: Filter for the specific data we need for this project
   
-  //TODO: 
+
   
   //res.route(searchEngineGETRequest)
-res.redirect(searchEngineGETRequest)
+//res.redirect(searchEngineGETRequest)
   //res.type('txt').send(res.redirect(searchEngineGETRequest));
 });
 
