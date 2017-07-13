@@ -10,7 +10,7 @@ var app = express();
 var mongodb = require(process.cwd()+'/datastore.js')
 
 const SEARCH_API_KEY = "AIzaSyDRR9lHUt32j6C8jjw"
-const SEARCH_ENGINE_ID = "V8DObocGFFQ68"
+const SEARCH_ENGINE_ID = "001153346103810259976:qlqqw-ih6t4"
 
 if (!process.env.DISABLE_XORIGIN) {
   app.use(function(req, res, next) {
@@ -53,11 +53,14 @@ app.route('/testdb')
 // Routing for User Search Scenario
 app.route('/api/imagesearch')
   .get((req,res) => {
-  
+  let queryString = req.params[0]
+  let offset = req.params[1]
+  console.log("querystring = "+queryString)
+  console.log("offset = "+offset)
   let searchEngineGETRequest = "https://www.googleapis.com/customsearch/v1?"+
-      "key="+SEARCH_API_KEY+"&cx="+SEARCH_ENGINE_ID+"":omuauf_lfve&q=lectures"
+      "key="+SEARCH_API_KEY+
+      "&cx="+SEARCH_ENGINE_ID+"&q="+queryString;
 
-  
   //res.type('txt').send('image search');
 });
 
