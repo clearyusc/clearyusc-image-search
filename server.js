@@ -53,6 +53,31 @@ app.route('/testdb')
 
 */
 
+function executeSearch(res, requestURL, startIndex) {
+  
+  client.get(requestURL, function (data, response) {
+    console.log(data);
+      //TODO: Filter for the specific data we need for this project
+      // url, snippet, thumbnail, context
+
+    const rawSearchResults = data
+    var searchResults = []
+    // TODO: Rewrite this to use array filtering (see below!)
+    //data.forEach((result) => {})
+    for (let i = 0; i < rawSearchResults.items.length; i++) {
+      let item = rawSearchResults.items[i]
+      let obj = {"url":null,"snippet":null,"thumbnail":null,"context":null}
+      obj["url"] = item["link"]
+      obj["snippet"] = item["snippet"]
+      //obj["thumbnail"] = item[]
+      searchResults.push(obj)
+    }
+  
+  res.type('txt').send(JSON.stringify(searchResults))
+  
+  });
+}
+
 // Routing for User Search Scenario
 app.route('/api/imagesearch/*')
   .get((req,res) => {
@@ -66,32 +91,9 @@ app.route('/api/imagesearch/*')
       "&cx="+SEARCH_ENGINE_ID+"&q="+queryString;
 
 // direct way 
-client.get(searchEngineGETRequest, function (data, response) {
-    // parsed response body as js object 
-    console.log(data);
-    // raw response 
-    //console.log(response);
 
-  
 
-      //TODO: Filter for the specific data we need for this project
-      // url, snippet, thumbnail, context
-    console.log("DID IT WORK KINDA?")
-    const rawSearchResults = data
-    var searchResults = []
-    // TODO: Rewrite this to use array filtering
-    for (let i = 0; i < rawSearchResults.items.length; i++) {
-      let item = rawSearchResults.items[i]
-      let obj = {"url":null,"snippet":null,"thumbnail":null,"context":null}
-      obj["url"] = item["link"]
-      obj["snippet"] = item["snippet"]
-      //obj["thumbnail"] = item[]
-      searchResults.push(obj)
-    }
-  
-  res.type('txt').send()
-  
-  });
+
   
   
   //res.type('txt').send(searchResults)
