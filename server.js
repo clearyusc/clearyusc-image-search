@@ -101,13 +101,16 @@ function executeSearch(res, requestURL, start, max) {
 app.route('/api/imagesearch/*')
   .get((req,res) => {
   
-  mongodb.dbConnect
+  mongodb.dbConnect;
   
   
   searchResults = [] // clear the search results from a previous search
   searchResultsCounter = 0;
   
   let queryString = req.params[0]
+  
+  mongodb.logQuery(queryString);
+  
   let offset = Number(req.query.offset) // decimal radix
   let searchEngineGETRequest = "https://www.googleapis.com/customsearch/v1?"+
       "key="+SEARCH_API_KEY+

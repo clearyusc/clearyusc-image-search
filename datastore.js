@@ -1,3 +1,5 @@
+'use strict'
+
 //lets require/import the mongodb native drivers.
 var mongodb = require('mongodb');
 
@@ -24,15 +26,20 @@ var dbConnect = MongoClient.connect(url, function (err, database) {
     // do some work here with the database.
     //db.insert
     //Close connection
-    database.close();
+    //database.close();
   }
 });
 
-function logQuery(req,) {
-  db.collection('quotes').save(req.body, (err, result) => {
+var logQuery = (term) => {
+  // TODO: dont save req.body. save the name of the search and the timestamp.
+  let queryObj = {"term":term, "when": + new Date()}
+  db.collection('search_queries').save(queryObj, (err, result) => {
     if (err) return console.log(err)
 
-    console.log('saved to database')
+    console.log('saved queryObj to database')
+  });
 }
 
-module.exports = {dbConnect}
+var viewQueryHistory ()
+
+module.exports = {dbConnect,logQuery}
