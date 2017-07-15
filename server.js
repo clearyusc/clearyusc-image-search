@@ -73,7 +73,15 @@ function executeSearch(res, requestURL, start, max) {
     
     // TODO: Rewrite this to use array filtering (see below!)
     //data.forEach((result) => {})
-    for (let i = 0; i < rawSearchResults.items.length; i++) {
+    let numResultsToLoad = 0;
+    if (max - searchResults.length >= GOOGLE_MAX_SEARCH_RESULTS) {
+      // we need to load another page or more of results
+      numResultsToLoad = GOOGLE_MAX_SEARCH_RESULTS
+    } else {
+      numResultsToLoad = max - searchResults.length
+    } 
+   
+    for (let i = 0; i < numResultsToLoad; i++) {
       let item = rawSearchResults.items[i]
       let obj = {"url":null,"snippet":null,"thumbnail":null,"context":null}
       obj["url"] = item["formattedHtml"]
@@ -86,8 +94,12 @@ function executeSearch(res, requestURL, start, max) {
       // more search results need to be loaded, must be done asynchronosouly
       let nextStartIndex = Number(start) + GOOGLE_MAX_SEARCH_RESULTS
       executeSearch(res, requestURL, nextStartIndex, Number(max))
+    } else {
+      // no more search results need to be loaded
+      res.type('txt').send(JSON.stringify(searchResults, null, 2))
     }
     
+    /*
     // recursive
     // TODO: Fix this logic. e.g. Right now if the offset=26, it outputs 20 results.
     // Should I just pass through the searchResults array into this recursive function instead of making it a global variable?
@@ -98,7 +110,8 @@ function executeSearch(res, requestURL, start, max) {
       executeSearch(res, requestURL, target, max);
     } else {
       res.type('txt').send(JSON.stringify(searchResults, null, 2))
-    }
+    }*/
+    
   });
 }
 
