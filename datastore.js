@@ -1,5 +1,6 @@
 'use strict'
 
+var timestamp = require('time-stamp');
 //lets require/import the mongodb native drivers.
 var mongodb = require('mongodb');
 
@@ -32,7 +33,7 @@ var dbConnect = MongoClient.connect(url, function (err, database) {
 
 var logQuery = (term) => {
   // TODO: dont save req.body. save the name of the search and the timestamp.
-  let queryObj = {"term":term, "when": + new Date()}
+  let queryObj = {"term":term, "when": timestamp('MM/DD/YYYY:mm:ss')}
   db.collection('search_queries').save(queryObj, (err, result) => {
     if (err) return console.log(err)
 
@@ -40,6 +41,13 @@ var logQuery = (term) => {
   });
 }
 
-var viewQueryHistory ()
+var viewQueryHistory = (res) => {
+  db.collection('search_queries').find().toArray(function(err, results) {
+    if (err) return console.log(err)
+    
+  res.type('txt').send(JSON.stringify(results, null, 2))
+  // send HTML file populated with quotes here
+})
+}
 
-module.exports = {dbConnect,logQuery}
+module.exports = {dbConnect, logQuery, viewQueryHistory}
