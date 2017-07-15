@@ -83,11 +83,13 @@ function executeSearch(res, requestURL, start, max) {
     }
   
     // recursive
-    // TODO: Should I just pass through the searchResults array into this recursive function instead of making it a global variable?
+    // TODO: Fix this logic. e.g. Right now if the offset=26, it outputs 30 results.
+    // Should I just pass through the searchResults array into this recursive function instead of making it a global variable?
     let a = parseInt(start) + parseInt(GOOGLE_MAX_SEARCH_RESULTS)
-    console.log("SEE, A = "+a.toString())
-    if (searchResults.length === (a-1)) {      
-      executeSearch(res, requestURL, a, max);
+    let target = (a < max ? a : max)
+    console.log("SEE, TARGET = "+target.toString())
+    if (searchResults.length < target) {      
+      executeSearch(res, requestURL, target, max);
     } else {
       res.type('txt').send(JSON.stringify(searchResults, null, 2))
     }
