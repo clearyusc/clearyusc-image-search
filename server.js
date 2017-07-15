@@ -56,6 +56,8 @@ app.route('/testdb')
 */
 
 function executeSearch(res, requestURL, start, max) {
+  console.log("executeSearch(), start = "+start)
+  console.log("executeSearch(), max = "+max)
   
   client.get(requestURL.concat("&start="+start), function (data, response) {
       console.log("executeSearch(), modified URL = "+requestURL.concat("&start="+start));
@@ -66,7 +68,7 @@ function executeSearch(res, requestURL, start, max) {
     //TODO: error handling on the GET request response!
     
     // TODO: handle the use case scenario where the offset < the number of search results returned by the query
-    console.log(JSON.stringify(data,3))
+    //console.log(JSON.stringify(data,3))
     const rawSearchResults = data
     
     // TODO: Rewrite this to use array filtering (see below!)
@@ -82,8 +84,10 @@ function executeSearch(res, requestURL, start, max) {
   
     // recursive
     // TODO: Should I just pass through the searchResults array into this recursive function instead of making it a global variable?
-    if (searchResults.length == (start+GOOGLE_MAX_SEARCH_RESULTS-1)) {
-      executeSearch(res, requestURL, start+GOOGLE_MAX_SEARCH_RESULTS, max);
+    let a = parseInt(start) + parseInt(GOOGLE_MAX_SEARCH_RESULTS)
+    console.log("SEE, A = "+a.toString())
+    if (searchResults.length === (a-1)) {      
+      executeSearch(res, requestURL, a, max);
     } else {
       res.type('txt').send(JSON.stringify(searchResults, null, 2))
     }
