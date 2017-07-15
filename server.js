@@ -87,7 +87,8 @@ function executeSearch(res, requestURL, start, max) {
       obj["url"] = item["formattedHtml"]
       obj["snippet"] = item["snippet"]
       //obj["thumbnail"] = item[]
-      searchResults.push(obj)
+      //searchResults.push(obj)
+      searchResults.push(item)
     }
   
     if (searchResults.length < Number(max)) {
@@ -99,18 +100,7 @@ function executeSearch(res, requestURL, start, max) {
       res.type('txt').send(JSON.stringify(searchResults, null, 2))
     }
     
-    /*
-    // recursive
-    // TODO: Fix this logic. e.g. Right now if the offset=26, it outputs 20 results.
-    // Should I just pass through the searchResults array into this recursive function instead of making it a global variable?
-    let a = Number(start) + Number(GOOGLE_MAX_SEARCH_RESULTS)
-    let target = (a > max) ? a : max
-    console.log("SEE, TARGET = "+target.toString())
-    if (searchResults.length < target) {      
-      executeSearch(res, requestURL, target, max);
-    } else {
-      res.type('txt').send(JSON.stringify(searchResults, null, 2))
-    }*/
+    
     
   });
 }
