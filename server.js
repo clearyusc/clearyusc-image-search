@@ -14,7 +14,7 @@ var searchResults = [];
 var searchResultsCounter = 0;
 
 const SEARCH_API_KEY = "AIzaSyBEEBx9ItiTIQKE-4uNNYBlnIqhYSUVmBc" 
-const SEARCH_ENGINE_ID = "001153346103810259976:qlqqw-ih6t4"
+const SEARCH_ENGINE_ID = "001153346103810259976:i0jyy5kttko"
 const GOOGLE_MAX_SEARCH_RESULTS = 10
 
 if (!process.env.DISABLE_XORIGIN) {
@@ -120,7 +120,7 @@ app.route('/api/imagesearch/*')
   console.log('originalURL'+req.originalUrl)
   let searchEngineGETRequest = "https://www.googleapis.com/customsearch/v1?"+
       "key="+SEARCH_API_KEY+
-      "&cx="+SEARCH_ENGINE_ID+"&q="+queryString;
+      "&cx="+SEARCH_ENGINE_ID+"&searchType=image"+"&q="+queryString;
 
   executeSearch(res, searchEngineGETRequest, 1, Number(offset));
   
