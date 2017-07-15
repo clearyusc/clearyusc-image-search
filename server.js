@@ -53,10 +53,11 @@ app.route('/testdb')
 
 */
 
-function executeSearch(res, requestURL, startIndex) {
+function executeSearch(res, requestURL) {
+  console.log("executeSearch(), requestURL = "+requestURL);
   
   client.get(requestURL, function (data, response) {
-    console.log(data);
+    
       //TODO: Filter for the specific data we need for this project
       // url, snippet, thumbnail, context
 
@@ -67,13 +68,13 @@ function executeSearch(res, requestURL, startIndex) {
     for (let i = 0; i < rawSearchResults.items.length; i++) {
       let item = rawSearchResults.items[i]
       let obj = {"url":null,"snippet":null,"thumbnail":null,"context":null}
-      obj["url"] = item["link"]
+      obj["url"] = item["formattedHtml"]
       obj["snippet"] = item["snippet"]
       //obj["thumbnail"] = item[]
       searchResults.push(obj)
     }
   
-  res.type('txt').send(JSON.stringify(searchResults))
+  res.type('txt').send(JSON.stringify(searchResults, null, 2))
   
   });
 }
@@ -90,8 +91,10 @@ app.route('/api/imagesearch/*')
       "key="+SEARCH_API_KEY+
       "&cx="+SEARCH_ENGINE_ID+"&q="+queryString;
 
-// direct way 
-
+  for (let i=0; i<GOOGLE_MAX_SEARCH_RESULTS; i+=10) {
+      executeSearch(res, (searchEngineGETRequest+"&start="+i));
+  }
+  executeSearch(res, searchEngineGETRequest, 1);
 
 
   
