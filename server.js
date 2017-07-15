@@ -82,11 +82,17 @@ function executeSearch(res, requestURL, start, max) {
       searchResults.push(obj)
     }
   
+    if (searchResults.length < Number(max)) {
+      // more search results need to be loaded, must be done asynchronosouly
+      let nextStartIndex = Number(start) + GOOGLE_MAX_SEARCH_RESULTS
+      executeSearch(res, requestURL, nextStartIndex, Number(max))
+    }
+    
     // recursive
     // TODO: Fix this logic. e.g. Right now if the offset=26, it outputs 20 results.
     // Should I just pass through the searchResults array into this recursive function instead of making it a global variable?
-    let a = parseInt(start) + parseInt(GOOGLE_MAX_SEARCH_RESULTS)
-    let target = (a < max ? a : max)
+    let a = Number(start) + Number(GOOGLE_MAX_SEARCH_RESULTS)
+    let target = (a > max) ? a : max
     console.log("SEE, TARGET = "+target.toString())
     if (searchResults.length < target) {      
       executeSearch(res, requestURL, target, max);
@@ -96,6 +102,7 @@ function executeSearch(res, requestURL, start, max) {
   });
 }
 
+
 // Routing for User Search Scenario
 app.route('/api/imagesearch/*')
   .get((req,res) => {
@@ -104,7 +111,7 @@ app.route('/api/imagesearch/*')
   searchResultsCounter = 0;
   
   let queryString = req.params[0]
-  let offset = parseInt(req.query.offset, 10) // decimal radix
+  let offset = Number(req.query.offset) // decimal radix
   console.log("querystring = "+queryString)
   console.log("offset = "+offset)
   console.log('originalURL'+req.originalUrl)
@@ -112,39 +119,8 @@ app.route('/api/imagesearch/*')
       "key="+SEARCH_API_KEY+
       "&cx="+SEARCH_ENGINE_ID+"&q="+queryString;
 
-  executeSearch(res, searchEngineGETRequest, 1, parseInt(offset));
+  executeSearch(res, searchEngineGETRequest, 1, Number(offset));
   
-  
-  // for (let i=1; i<parseInt(offset, 10); i+=GOOGLE_MAX_SEARCH_RESULTS) {
-  //     executeSearch(res, searchEngineGETRequest.concat("&start="+i));
-  // }
-  
-  //executeSearch(res, searchEngineGETRequest);
-
-
-  
-  
-  //res.type('txt').send(searchResults)
-  
-  /*
-  //TODO: Add pagination via the offset using the Google Search Engine API
-  
-  if (offset != null && offset > GOOGLE_MAX_SEARCH_RESULTS) {
-    // ex: 26
-    res.redirect(searchEngineGETRequest.concat("&num=10&start="+11)); 
-    for (let i=11;i<offset;i+=10) {
-      //res.redirect(searchEngineGETRequest.concat("&num=10&start="+i.toString())); 
-    }
-  } else {
-    res.redirect(searchEngineGETRequest)
-  }*/
-  
-  
-
-  
-  //res.route(searchEngineGETRequest)
-//res.redirect(searchEngineGETRequest)
-  //res.type('txt').send(res.redirect(searchEngineGETRequest));
 });
 
 // Routing for Latest Search keys
