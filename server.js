@@ -60,19 +60,11 @@ function executeSearch(res, requestURL, start, max) {
   console.log("executeSearch(), max = "+max)
   
   client.get(requestURL.concat("&start="+start), function (data, response) {
-      console.log("executeSearch(), modified URL = "+requestURL.concat("&start="+start));
-
-      //TODO: Filter for the specific data we need for this project
-      // url, snippet, thumbnail, context
+    /* TODO: handle the use case scenario where the offset < 
+      the number of search results returned by the query */
     
-    //TODO: error handling on the GET request response!
-    
-    // TODO: handle the use case scenario where the offset < the number of search results returned by the query
-    //console.log(JSON.stringify(data,3))
     const rawSearchResults = data
     
-    // TODO: Rewrite this to use array filtering (see below!)
-    //data.forEach((result) => {})
     let numResultsToLoad = 0;
     if (max - searchResults.length >= GOOGLE_MAX_SEARCH_RESULTS) {
       // we need to load another page or more of results
@@ -84,25 +76,27 @@ function executeSearch(res, requestURL, start, max) {
     for (let i = 0; i < numResultsToLoad; i++) {
       let item = rawSearchResults.items[i]
       let obj = {"url":null,"snippet":null,"thumbnail":null,"context":null}
+      
       obj["url"] = item["link"]
       obj["snippet"] = item["snippet"]
       obj["thumbnail"] = item["image"]["thumbnailLink"]
+      obj["context"] = item["image"]["contextLink"]
+
       searchResults.push(obj)
-      //searchResults.push(item)
     }
   
-    if (searchResults.length < Number(max)) {
-      // more search results need to be loaded, must be done asynchronosouly
+    /*  Determine if another search page needs to be added
+        Note: Google currently only allows 10 search results per query, 
+        hence why we have to implement this aspect on our own */
+    if (searchResults.length < Number(max)) {      
       let nextStartIndex = Number(start) + GOOGLE_MAX_SEARCH_RESULTS
       executeSearch(res, requestURL, nextStartIndex, Number(max))
     } else {
-      // no more search results need to be loaded
       res.type('txt').send(JSON.stringify(searchResults, null, 2))
-    }
-    
-    
-    
-  });
+    }        
+  }).on('error', function (err) {
+    console.log('search request error', err);
+});
 }
 
 
@@ -115,9 +109,6 @@ app.route('/api/imagesearch/*')
   
   let queryString = req.params[0]
   let offset = Number(req.query.offset) // decimal radix
-  console.log("querystring = "+queryString)
-  console.log("offset = "+offset)
-  console.log('originalURL'+req.originalUrl)
   let searchEngineGETRequest = "https://www.googleapis.com/customsearch/v1?"+
       "key="+SEARCH_API_KEY+
       "&cx="+SEARCH_ENGINE_ID+"&q="+queryString+"&searchType=image";
