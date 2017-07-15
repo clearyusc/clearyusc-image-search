@@ -83,7 +83,7 @@ function executeSearch(res, requestURL, start, max) {
     }
   
     // recursive
-    // TODO: Fix this logic. e.g. Right now if the offset=26, it outputs 30 results.
+    // TODO: Fix this logic. e.g. Right now if the offset=26, it outputs 20 results.
     // Should I just pass through the searchResults array into this recursive function instead of making it a global variable?
     let a = parseInt(start) + parseInt(GOOGLE_MAX_SEARCH_RESULTS)
     let target = (a < max ? a : max)
