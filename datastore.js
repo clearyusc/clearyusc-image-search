@@ -45,9 +45,13 @@ var viewQueryHistory = (res) => {
   db.collection('search_queries').find().toArray(function(err, results) {
     if (err) return console.log(err)
     
-  res.type('txt').send(JSON.stringify(results, null, 2))
-  // send HTML file populated with quotes here
-})
+    let formattedResults = []
+    results.forEach((result) => {
+      formattedResults.push({"term":result.term,"when":result.when})
+    });
+    
+  res.type('txt').send(JSON.stringify(formattedResults, null, 2))
+});
 }
 
 module.exports = {dbConnect, logQuery, viewQueryHistory}
