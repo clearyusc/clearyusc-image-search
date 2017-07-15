@@ -56,9 +56,6 @@ app.route('/testdb')
 */
 
 function executeSearch(res, requestURL, start, max) {
-  console.log("executeSearch(), start = "+start)
-  console.log("executeSearch(), max = "+max)
-  
   client.get(requestURL.concat("&start="+start), function (data, response) {
     /* TODO: handle the use case scenario where the offset < 
       the number of search results returned by the query */
