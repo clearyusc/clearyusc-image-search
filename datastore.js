@@ -12,18 +12,27 @@ var MongoClient = mongodb.MongoClient;
 var url = 'mongodb://dbuser1:password1@ds035846.mlab.com:35846/image-search-db';
 //(Focus on This Variable)
 
+var db
 // Use connect method to connect to the Server
-var dbConnect = MongoClient.connect(url, function (err, db) {
+var dbConnect = MongoClient.connect(url, function (err, database) {
   if (err) {
     console.log('Unable to connect to the mongoDB server. Error:', err);
   } else {
     console.log('Connection established to', url);
 
+    db = database
     // do some work here with the database.
     //db.insert
     //Close connection
-    db.close();
+    database.close();
   }
 });
+
+function logQuery(req,) {
+  db.collection('quotes').save(req.body, (err, result) => {
+    if (err) return console.log(err)
+
+    console.log('saved to database')
+}
 
 module.exports = {dbConnect}

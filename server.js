@@ -101,6 +101,9 @@ function executeSearch(res, requestURL, start, max) {
 app.route('/api/imagesearch/*')
   .get((req,res) => {
   
+  mongodb.dbConnect
+  
+  
   searchResults = [] // clear the search results from a previous search
   searchResultsCounter = 0;
   
